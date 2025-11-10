@@ -1,0 +1,57 @@
+Table users {
+  id int [pk, increment]
+  username varchar
+  email varchar
+  password varchar
+  date_joined datetime
+  balance decimal
+}
+
+Table portfolios {
+  id int [pk, increment]
+  user_id int [ref: > users.id]
+  name varchar
+  created_at datetime
+  total_value decimal
+}
+
+Table holdings {
+  id int [pk, increment]
+  portfolio_id int [ref: > portfolios.id]
+  ticker varchar
+  quantity decimal
+  avg_purchase_price decimal
+}
+
+Table transactions {
+  id int [pk, increment]
+  user_id int [ref: > users.id]
+  portfolio_id int [ref: > portfolios.id]
+  ticker varchar
+  transaction_type varchar // e.g. BUY, SELL, DEPOSIT, WITHDRAW
+  amount decimal
+  quantity decimal
+  price_per_share decimal
+  created_at datetime
+}
+
+Table reports {
+  id int [pk, increment]
+  user_id int [ref: > users.id]
+  portfolio_id int [ref: > portfolios.id]
+  report_type varchar // e.g. performance, risk, ESG
+  file_path varchar
+  created_at datetime
+}
+
+Table esg_companies {
+  id int [pk, increment]
+  ticker varchar
+  company_name varchar
+  sector varchar
+  esg_score int
+  description text
+}
+
+// Optional relationship for GreenTech insights
+Ref: holdings.ticker > esg_companies.ticker
